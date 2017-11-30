@@ -403,17 +403,26 @@ SECTIONS['preprocess'] = {
         'help': "Padded values assignment"}
         }
 
+SECTIONS['universal-reconstruction'] = {
+    'x-axis': {
+        'default': None,
+        'required': True,
+        'type': tupleize(float),
+        'help': "X-axis position"}
+        }
+
 TOMO_PARAMS = ('flat-correction', 'reconstruction', 'tomographic-reconstruction', 'fbp', 'dfi', 'ir', 'sart', 'sbtv')
 
 PREPROC_PARAMS = ('preprocess', 'flat-correction', 'retrieve-phase')
 LAMINO_PARAMS = PREPROC_PARAMS + ('laminographic-reconstruction',)
+UNI_RECO_PARAMS = PREPROC_PARAMS + ('universal-reconstruction',)
 
 NICE_NAMES = ('General', 'Input', 'Flat field correction', 'Phase retrieval',
               'Sinogram generation', 'General reconstruction', 'Tomographic reconstruction',
               'Laminographic reconstruction', 'Filtered backprojection',
               'Direct Fourier Inversion', 'Iterative reconstruction',
               'SART', 'SBTV', 'GUI settings', 'Estimation', 'Performance',
-              'Preprocess')
+              'Preprocess', 'Universal reconstruction')
 
 def get_config_name():
     """Get the command line --config option."""
