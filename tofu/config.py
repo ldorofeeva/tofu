@@ -403,6 +403,29 @@ SECTIONS['preprocess'] = {
         'help': "Padded values assignment"}
         }
 
+SECTIONS['cone-beam-weight'] = {
+    'source-position-y': {
+        'default': "-Inf",
+        'type': tupleize(dtype=list),
+        'help': "Y source position (along beam direction) in global coordinates [pixels]"},
+    'detector-position-y': {
+        'default': "0",
+        'type': tupleize(dtype=list),
+        'help': "Y detector position (along beam direction) in global coordinates [pixels]"},
+    'center-x': {
+        'default': None,
+        'type': tupleize(),
+        'help': "X rotation axis position on a projection"},
+    'center-z': {
+        'default': None,
+        'type': tupleize(),
+        'help': "Z rotation axis position on a projection"},
+    'axis-angle-x': {
+        'default': "0",
+        'type': tupleize(dtype=list),
+        'help': "Rotation axis rotation around the x axis"
+                "(laminographic angle, 0 = tomography) [deg]"}}
+
 SECTIONS['universal-reconstruction'] = {
     'x-axis': {
         'default': None,
@@ -413,7 +436,7 @@ SECTIONS['universal-reconstruction'] = {
 
 TOMO_PARAMS = ('flat-correction', 'reconstruction', 'tomographic-reconstruction', 'fbp', 'dfi', 'ir', 'sart', 'sbtv')
 
-PREPROC_PARAMS = ('preprocess', 'flat-correction', 'retrieve-phase')
+PREPROC_PARAMS = ('preprocess', 'cone-beam-weight', 'flat-correction', 'retrieve-phase')
 LAMINO_PARAMS = PREPROC_PARAMS + ('laminographic-reconstruction',)
 UNI_RECO_PARAMS = PREPROC_PARAMS + ('universal-reconstruction',)
 
@@ -422,7 +445,7 @@ NICE_NAMES = ('General', 'Input', 'Flat field correction', 'Phase retrieval',
               'Laminographic reconstruction', 'Filtered backprojection',
               'Direct Fourier Inversion', 'Iterative reconstruction',
               'SART', 'SBTV', 'GUI settings', 'Estimation', 'Performance',
-              'Preprocess', 'Universal reconstruction')
+              'Preprocess', 'Cone beam weight', 'Universal reconstruction')
 
 def get_config_name():
     """Get the command line --config option."""

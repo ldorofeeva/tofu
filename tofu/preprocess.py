@@ -247,9 +247,9 @@ def create_projection_filtering_pipeline(args, graph, processing_node=None):
     return (pad, crop)
 
 
-def create_preprocessing_pipeline(args, graph, source=None, processing_node=None):
-    pm = Ufo.PluginManager()
-
+def create_preprocessing_pipeline(args, graph, source=None, processing_node=None,
+                                  cone_beam_weight=True):
+    import numpy as np
     if not (args.width and args.height):
         width, height = determine_shape(args, args.projections)
         if not width:
@@ -284,6 +284,18 @@ def create_preprocessing_pipeline(args, graph, source=None, processing_node=None
         tmp = args.width
         args.width = args.height
         args.height = tmp
+
+    if cone_beam_weight and not np.all(np.isinf(args.source_position_y)):
+        # Cone beam projection weight
+        LOG.debug('Enabling cone beam weighting')
+        weight = get_task('cone-beam-projection-weight', processing_node=processing_node)
+        weight.props.source_distance = (-np.array(args.source_position_y)).tolist()
+        weight.props.detector_distance = args.detector_position_y
+        weight.props.center_x = args.center_x or [args.width / 2. + (args.width % 2) * 0.5]
+        weight.props.center_z = args.center_z or [args.height / 2. + (args.height % 2) * 0.5]
+        weight.props.axis_angle_x = args.axis_angle_x
+        graph.connect_nodes(current, weight)
+        current = weight
 
     if args.projection_filter != 'none':
         pf_first, pf_last = create_projection_filtering_pipeline(args, graph,
